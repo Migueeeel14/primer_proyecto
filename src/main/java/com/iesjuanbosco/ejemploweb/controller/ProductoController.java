@@ -1,0 +1,56 @@
+package com.iesjuanbosco.ejemploweb.controller;
+
+import com.iesjuanbosco.ejemploweb.entity.Producto;
+import com.iesjuanbosco.ejemploweb.repository.ProductoRepository;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Controller //anotación que le indica a Spring que esta clase es un controlador
+public class ProductoController {
+
+    //Para acceder al repositorio creamos una propiedad y la asignamos en el constructor
+    private ProductoRepository productoRepository;
+
+    public ProductoController(ProductoRepository repository){
+        this.productoRepository = repository;
+    }
+
+    /* Con la anotación GetMapping le indicamos a Spring que el siguiente metodo
+       se va a ejecutar cuando el usuario acceda a la URL https://localhost/productos */
+    @GetMapping("/productos")
+    public String findAll(){
+        List<Producto> productos = this.productoRepository.findAll();
+
+        //model
+
+        return "producto-list";
+    }
+
+    @GetMapping("/productos/add")
+    public String add(){
+        List<Producto> productos = new ArrayList<Producto>();
+        Producto p1 = new Producto(null, "producto 1",20,45.5);
+        Producto p2 = new Producto(null, "producto 2",50,5.0);
+        Producto p3 = new Producto(null, "producto 3",30,50.5);
+        Producto p4 = new Producto(null, "producto 4",10,30.0);
+        productos.add(p1);
+        productos.add(p2);
+        productos.add(p3);
+        productos.add(p4);
+
+        //guarda el array en la base de datos gracias al repositorio
+        this.productoRepository.saveAll(productos);
+
+        //Redirige al controlador /productos
+        return "redirect:/productos";
+    }
+
+    /*@PostMapping("/productos")
+    public String addProducto(){
+        return "producto-add";
+    }*/
+}
