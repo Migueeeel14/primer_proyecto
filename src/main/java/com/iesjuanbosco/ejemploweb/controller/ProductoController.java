@@ -3,8 +3,10 @@ package com.iesjuanbosco.ejemploweb.controller;
 import com.iesjuanbosco.ejemploweb.entity.Producto;
 import com.iesjuanbosco.ejemploweb.repository.ProductoRepository;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,11 +24,12 @@ public class ProductoController {
     /* Con la anotación GetMapping le indicamos a Spring que el siguiente metodo
        se va a ejecutar cuando el usuario acceda a la URL https://localhost/productos */
     @GetMapping("/productos")
-    public String findAll(){
+    public String findAll(Model model){
         List<Producto> productos = this.productoRepository.findAll();
 
         //model
-
+        //Pasamos los datos a la vista
+        model.addAttribute("productos",productos);
         return "producto-list";
     }
 
@@ -47,6 +50,19 @@ public class ProductoController {
 
         //Redirige al controlador /productos
         return "redirect:/productos";
+    }
+
+    @GetMapping("/productos2") //Anotacion que indica la URL localhost:8080/ meiante get
+    @ResponseBody //Anotacion que indica que no pase por el motor de la plantilla thymeleaf sino que voy a devolver el HTML directamente
+    public String index(){
+        List<Producto> productos = this.productoRepository.findAll();
+        StringBuilder HTML = new StringBuilder("<html><body>");
+        productos.forEach(producto -> {
+            HTML.append("<p>" + producto.getTitulo() + "</p>");
+        });
+        HTML.append("</body></html>");
+
+        return HTML.toString();
     }
 
     /*@PostMapping("/productos")
