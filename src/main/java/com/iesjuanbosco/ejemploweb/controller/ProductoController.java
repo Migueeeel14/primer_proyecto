@@ -24,22 +24,28 @@ public class ProductoController {
     /* Con la anotación GetMapping le indicamos a Spring que el siguiente metodo
        se va a ejecutar cuando el usuario acceda a la URL https://localhost/productos */
     @GetMapping("/productos")
+    //Metodo findAll();
     public String findAll(Model model){
         List<Producto> productos = this.productoRepository.findAll();
 
         //model
         //Pasamos los datos a la vista
         model.addAttribute("productos",productos);
+        //product-list se encuentra en resources/templates como un html.
         return "producto-list";
     }
 
+    //Metodo par añadir productos a la lista de productos que crearemos como ArrayList
     @GetMapping("/productos/add")
     public String add(){
+        //Lista de productos
         List<Producto> productos = new ArrayList<Producto>();
+        //Añadimos los atributos de cada producto
         Producto p1 = new Producto(null, "producto 1",20,45.5);
         Producto p2 = new Producto(null, "producto 2",50,5.0);
         Producto p3 = new Producto(null, "producto 3",30,50.5);
         Producto p4 = new Producto(null, "producto 4",10,30.0);
+        //Los añadimos a la lista de productos con .add
         productos.add(p1);
         productos.add(p2);
         productos.add(p3);
