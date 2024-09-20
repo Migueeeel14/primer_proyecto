@@ -4,12 +4,11 @@ import com.iesjuanbosco.ejemploweb.entity.Producto;
 import com.iesjuanbosco.ejemploweb.repository.ProductoRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller //anotación que le indica a Spring que esta clase es un controlador
 public class ProductoController {
@@ -31,6 +30,7 @@ public class ProductoController {
         //model
         //Pasamos los datos a la vista
         model.addAttribute("productos",productos);
+
         //product-list se encuentra en resources/templates como un html.
         return "producto-list";
     }
@@ -58,21 +58,68 @@ public class ProductoController {
         return "redirect:/productos";
     }
 
-    @GetMapping("/productos2") //Anotacion que indica la URL localhost:8080/ meiante get
-    @ResponseBody //Anotacion que indica que no pase por el motor de la plantilla thymeleaf sino que voy a devolver el HTML directamente
-    public String index(){
-        List<Producto> productos = this.productoRepository.findAll();
-        StringBuilder HTML = new StringBuilder("<html><body>");
-        productos.forEach(producto -> {
-            HTML.append("<p>" + producto.getTitulo() + "</p>");
-        });
-        HTML.append("</body></html>");
-
-        return HTML.toString();
+    /*Borra un producto a partir del id de la ruta*/
+    @GetMapping("/productos/del/{id}")
+    public String delete(@PathVariable long id){
+        //Borrar el producto usando el repositorio
+        productoRepository.deleteById(id);
+        //Redirigir a /productos
+        return "redirect:/productos";
     }
 
-    /*@PostMapping("/productos")
-    public String addProducto(){
-        return "producto-add";
-    }*/
+    //Muestra un producto a partir del id de la ruta
+    @GetMapping("/productos/view/{id}")
+    public String view(@PathVariable Long id, Model model){
+        //Obtenemos el producto de la BD a partir del id de la barra de direcciones
+        Optional producto = productoRepository.findById(id);
+        if(producto.isPresent()){
+            //Mandamos el producto a la vista
+            model.addAttribute("producto",producto.get());
+            return "producto-view";
+        }
+        else{
+            return "redirect:/productos";
+        }
+    }
+
+    /*Editar un producto a partir del id de la ruta*/
+    @GetMapping("/productos/edit/{id}")
+    public String edit(@PathVariable long id, Model model){
+        Producto producto = productoRepository.findById(id).orElse(null);
+        if(producto==null){
+            return "redirect:/productos";
+        }
+        else{
+            model.addAttribute("producto", producto);
+        }
+        //Redirigir a /productos
+        return "producto-edit";
+    }
+
+    //Muestra los cambios una vez se envian
+    @PostMapping("/productos/update")
+    public String update(Producto producto) {
+        // Guardar el producto actualizado
+        productoRepository.save(producto);
+
+        // Redirigir a la lista de productos
+        return "redirect:/productos";
+    }
+
+    //Cuando entras a la ruta muestra esta vista
+    @GetMapping("/productos/new")
+    public String newProducto(Model model){
+        model.addAttribute("producto", new Producto());
+        return "producto-new";
+    }
+
+    //Lo que se muestra cuando se envia la vista
+    @PostMapping("/productos/new")
+    public String newProductoInsert(Producto producto){
+        //Insertamos los dtos en la BD
+        productoRepository.save(producto);
+
+        //Redirigimos a /productos
+        return "redirect:/productos";
+    }
 }

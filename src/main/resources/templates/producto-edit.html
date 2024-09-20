@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>Editar producto</h1>
+    <form action="/productos/update" method="post">
+        <input type="hidden" name="id" th:value="${producto.id}"/>
+
+        <label for="titulo">Título:</label>
+        <input type="text" id="titulo" name="titulo" th:value="${producto.titulo}" required /><br>
+
+        <label for="cantidad">Cantidad:</label>
+        <input type="number" id="cantidad" name="cantidad" th:value="${producto.cantidad}" required /><br>
+
+        <label for="precio">Precio:</label>
+        <input type="number" id="precio" name="precio" th:value="${producto.precio}" step="0.01" required /><br>
+
+        <button type="submit">Guardar Cambios</button>
+    </form>
+</body>
+</html>

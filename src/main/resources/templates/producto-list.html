@@ -5,12 +5,21 @@
     <title>Listado de productos</title>
 </head>
 <body>
-    <div id="productos">
-        <div th:eatch="producto: ${productos}">
-            <h2 th:text="${producto.titulo}">Titulo</h2>
-            Precio: <span th:text="${producto.precio}">Precio</span>
-            Cantidad: <span th:text="${producot.cantidad}"> Cantidad</span>
-        </div>
-    </div>
+<div id="productos">
+    <p th:if="${#lists.isEmpty(productos)}">No hay productos.</p>
+    <ul>
+        <li th:each="producto: ${productos}">
+            <a th:href="@{/productos/view/{id}(id=${producto.id})}"
+               th:text="${producto.titulo}"></a>
+            <a th:href="@{/productos/del/{id}(id=${producto.id})}">borrar</a>
+            <!--Queremos cargar una ruta del tipo: /productos/del/3 -->
+            <a th:href="@{/productos/edit/{id}(id=${producto.id})}">editar</a>
+        </li>
+    </ul>
+</div>
+    <a th:href="@{/productos/new}">Insertar productos</a><br>
+
+    <a href="/productos/add">Cargar productos de prueba</a><br>
+    <a th:href="@{/productos/add}">Cargar productos de prueba (enlace dinámico)</a>
 </body>
 </html>
