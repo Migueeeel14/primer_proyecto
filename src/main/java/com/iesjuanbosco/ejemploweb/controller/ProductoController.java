@@ -28,7 +28,7 @@ public class ProductoController {
         List<Producto> productos = this.productoRepository.findAll();
 
         //model
-        //Pasamos los datos a la vista
+        //Pasamos los datcos a la vista
         model.addAttribute("productos",productos);
 
         //product-list se encuentra en resources/templates como un html.
@@ -41,6 +41,7 @@ public class ProductoController {
         //Lista de productos
         List<Producto> productos = new ArrayList<Producto>();
         //Añadimos los atributos de cada producto
+        //Deben seguir el mismo orden que el objeto
         Producto p1 = new Producto(null, "producto 1",20,45.5);
         Producto p2 = new Producto(null, "producto 2",50,5.0);
         Producto p3 = new Producto(null, "producto 3",30,50.5);
@@ -60,6 +61,8 @@ public class ProductoController {
 
     /*Borra un producto a partir del id de la ruta*/
     @GetMapping("/productos/del/{id}")
+    //@PathVariable vincula una variable con un parámetro, en este caso sirve para buscar el producto a
+    // través del id y poder eliminarlo mediante dicha variable
     public String delete(@PathVariable long id){
         //Borrar el producto usando el repositorio
         productoRepository.deleteById(id);
@@ -71,12 +74,15 @@ public class ProductoController {
     @GetMapping("/productos/view/{id}")
     public String view(@PathVariable Long id, Model model){
         //Obtenemos el producto de la BD a partir del id de la barra de direcciones
+        //En este caso usamos Optional para que no salten posibles exceptiones de que no exista el producto. Se usa para englobar tanto nulos como no nulos.
         Optional producto = productoRepository.findById(id);
+        //isPresent() comprueba que el valor no sea nulo, en el caso de que no lo sea se hace lo del condicional.
         if(producto.isPresent()){
-            //Mandamos el producto a la vista
+            //Mandamos el producto a la vista mediante el .get().
             model.addAttribute("producto",producto.get());
             return "producto-view";
         }
+        //En el caso de que no encuentre ningun producto, te redirige a la ruta productos
         else{
             return "redirect:/productos";
         }
@@ -85,10 +91,14 @@ public class ProductoController {
     /*Editar un producto a partir del id de la ruta*/
     @GetMapping("/productos/edit/{id}")
     public String edit(@PathVariable long id, Model model){
+        //Buscar un producto por la id, en caso de no encontrarlo devuelve null.
+        //Se usa para que no se produzcan excepciones en caso de no encontrar el producto.
         Producto producto = productoRepository.findById(id).orElse(null);
+        //En caso de no haber encontrado el producto y nos haya devuelto null, nos redirije a la ruta productos
         if(producto==null){
             return "redirect:/productos";
         }
+        //Si el producto a editar si existe, lo mostramos en la vista a través del model.
         else{
             model.addAttribute("producto", producto);
         }
@@ -96,6 +106,7 @@ public class ProductoController {
         return "producto-edit";
     }
 
+    //Es el Post del metodo editar.
     //Muestra los cambios una vez se envian
     @PostMapping("/productos/update")
     public String update(Producto producto) {
@@ -113,6 +124,7 @@ public class ProductoController {
         return "producto-new";
     }
 
+    //Post del metodo newProducto
     //Lo que se muestra cuando se envia la vista
     @PostMapping("/productos/new")
     public String newProductoInsert(Producto producto){

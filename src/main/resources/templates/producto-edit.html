@@ -3,22 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <!--
+        <title>Title</title>: Define el título de la página que aparecerá en la pestaña del navegador.
+    -->
 </head>
 <body>
-    <h1>Editar producto</h1>
-    <form action="/productos/update" method="post">
-        <input type="hidden" name="id" th:value="${producto.id}"/>
+<h1>Editar producto</h1>
+<!--
+    <h1>: Encabezado principal que muestra "Editar producto" como título de la página.
+-->
 
-        <label for="titulo">Título:</label>
-        <input type="text" id="titulo" name="titulo" th:value="${producto.titulo}" required /><br>
+<form action="/productos/update" method="post">
+    <!--
+        <form>: Inicio del formulario que permite editar un producto.
+        action="/productos/update": Define la URL a la que se enviará el formulario para actualizar el producto.
+        method="post": Establece que el metodo http usado será POST (envío de datos al servidor).
+    -->
 
-        <label for="cantidad">Cantidad:</label>
-        <input type="number" id="cantidad" name="cantidad" th:value="${producto.cantidad}" required /><br>
+    <input type="hidden" name="id" th:value="${producto.id}"/>
+    <!--
+        <input type="hidden">: Campo oculto que contiene el ID del producto.
+        name="id": Define el nombre del campo que se enviará al servidor.
+        th:value="${producto.id}": Thymeleaf inserta dinámicamente el valor del ID del producto
+        (ejemplo: si el producto tiene id=5, este valor será 5).
+    -->
 
-        <label for="precio">Precio:</label>
-        <input type="number" id="precio" name="precio" th:value="${producto.precio}" step="0.01" required /><br>
+    <label for="titulo">Título:</label>
+    <!--
+        <label>: Etiqueta que indica el propósito del campo siguiente, en este caso "Título".
+        for="titulo": Asocia la etiqueta con el campo de entrada que tiene el atributo "id='titulo'".
+    -->
 
-        <button type="submit">Guardar Cambios</button>
-    </form>
+    <input type="text" id="titulo" name="titulo" th:value="${producto.titulo}" required /><br>
+    <!--
+        <input type="text">: Campo de texto donde el usuario puede editar el título del producto.
+        id="titulo": Identificador del campo de entrada.
+        name="titulo": Nombre del campo que será enviado al servidor.
+        th:value="${producto.titulo}": Thymeleaf inserta dinámicamente el valor actual del título del producto.
+        required: Hace que este campo sea obligatorio para poder enviar el formulario.
+        <br>: Salto de línea para mejorar la presentación en la interfaz.
+    -->
+
+    <label for="cantidad">Cantidad:</label>
+    <!--
+        <label>: Etiqueta que indica el propósito del campo de entrada "cantidad".
+        for="cantidad": Asocia la etiqueta con el campo de entrada con id="cantidad".
+    -->
+
+    <input type="number" id="cantidad" name="cantidad" th:value="${producto.cantidad}" required /><br>
+    <!--
+        <input type="number">: Campo que permite introducir solo números.
+        id="cantidad": Identificador del campo de entrada.
+        name="cantidad": Nombre del campo que será enviado al servidor.
+        th:value="${producto.cantidad}": Thymeleaf inserta el valor actual de la cantidad del producto.
+        required: Campo obligatorio.
+        <br>: Salto de línea.
+    -->
+
+    <label for="precio">Precio:</label>
+    <!--
+        <label>: Etiqueta para el campo de entrada del precio.
+        for="precio": Asocia la etiqueta con el campo de entrada con id="precio".
+    -->
+
+    <input type="number" id="precio" name="precio" th:value="${producto.precio}" step="0.01" required /><br>
+    <!--
+        <input type="number">: Campo de entrada para números (precio).
+        id="precio": Identificador del campo de entrada.
+        name="precio": Nombre del campo que será enviado al servidor.
+        th:value="${producto.precio}": Thymeleaf inserta el valor actual del precio del producto.
+        step="0.01": Permite introducir valores decimales con hasta dos cifras después del punto decimal (por ejemplo, 10.50).
+        required: Campo obligatorio.
+        <br>: Salto de línea.
+    -->
+
+    <button type="submit">Guardar Cambios</button>
+    <!--
+        <button type="submit">: Botón que envía el formulario cuando se hace clic.
+        El formulario será enviado a la URL especificada en el atributo "action" del formulario (/productos/update).
+    -->
+</form>
 </body>
 </html>

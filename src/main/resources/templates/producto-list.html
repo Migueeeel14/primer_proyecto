@@ -3,23 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <title>Listado de productos</title>
+    <!--
+        <title>Listado de productos</title>: El título que aparecerá en la pestaña del navegador.
+    -->
 </head>
 <body>
 <div id="productos">
+    <!--
+        <div id="productos">: Contenedor principal para la lista de productos.
+    -->
+
     <p th:if="${#lists.isEmpty(productos)}">No hay productos.</p>
+    <!--
+        <p th:if="${#lists.isEmpty(productos)}">: Verifica si la lista de productos está vacía.
+        Si lo está, muestra el texto "No hay productos.".
+        ${#lists.isEmpty(productos)}: Thymeleaf evalúa si la variable "productos" es una lista vacía.
+    -->
+
     <ul>
         <li th:each="producto: ${productos}">
-            <a th:href="@{/productos/view/{id}(id=${producto.id})}"
-               th:text="${producto.titulo}"></a>
+            <!--
+                <ul>: Define una lista no ordenada (con viñetas).
+                <li th:each="producto: ${productos}">: Bucle que recorre cada producto en la lista "productos".
+                Cada iteración crea un elemento <li> (lista) para un producto.
+            -->
+
+            <a th:href="@{/productos/view/{id}(id=${producto.id})}" th:text="${producto.titulo}"></a>
+            <!--
+                <a>: Enlace para ver detalles del producto.
+                th:href="@{/productos/view/{id}(id=${producto.id})}": Genera dinámicamente el enlace a la página
+                de visualización del producto, usando el ID del producto.
+                Ejemplo: Si el id es 3, el enlace se convierte en "/productos/view/3".
+
+                th:text="${producto.titulo}": Inserta el título del producto como texto del enlace.
+            -->
+
             <a th:href="@{/productos/del/{id}(id=${producto.id})}">borrar</a>
-            <!--Queremos cargar una ruta del tipo: /productos/del/3 -->
+            <!--
+                <a>: Enlace para borrar el producto.
+                th:href="@{/productos/del/{id}(id=${producto.id})}": Genera un enlace para eliminar el producto.
+                Ejemplo: "/productos/del/3" eliminaría el producto con id 3.
+            -->
+
             <a th:href="@{/productos/edit/{id}(id=${producto.id})}">editar</a>
+            <!--
+                <a>: Enlace para editar el producto.
+                th:href="@{/productos/edit/{id}(id=${producto.id})}": Genera un enlace para editar el producto.
+                Ejemplo: "/productos/edit/3" permitiría editar el producto con id 3.
+            -->
         </li>
     </ul>
 </div>
-    <a th:href="@{/productos/new}">Insertar productos</a><br>
 
-    <a href="/productos/add">Cargar productos de prueba</a><br>
-    <a th:href="@{/productos/add}">Cargar productos de prueba (enlace dinámico)</a>
+<a th:href="@{/productos/new}">Insertar productos</a><br>
+<!--
+    <a>: Enlace para agregar un nuevo producto.
+    th:href="@{/productos/new}": Genera dinámicamente un enlace a la página para insertar un nuevo producto.
+    Ejemplo: "/productos/new".
+-->
+
+<a href="/productos/add">Cargar productos de prueba</a><br>
+<!--
+    <a href="/productos/add">: Enlace para cargar productos de prueba.
+    Este es un enlace estático, no generado dinámicamente.
+-->
+
+<a th:href="@{/productos/add}">Cargar productos de prueba (enlace dinámico)</a>
+<!--
+    <a th:href="@{/productos/add}">: Enlace para cargar productos de prueba, generado dinámicamente
+    por Thymeleaf.
+-->
 </body>
 </html>

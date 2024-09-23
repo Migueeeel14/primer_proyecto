@@ -3,12 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <title></title>
+    <!--
+        <title></title>: El título del documento está vacío, no se muestra nada en la pestaña del navegador.
+    -->
 </head>
 <body>
-    <h2 th:text="${producto.titulo}">Titulo</h2>
-    Precio: <span th:text="${producto.precio}">Precio</span>
-    Cantidad: <span th:text="${producto.cantidad}"> Cantidad</span>
+<h2 th:text="${producto.titulo}">Titulo</h2>
+<!--
+    <h2>: Título de segundo nivel para mostrar el nombre del producto.
+    th:text="${producto.titulo}": Thymeleaf inserta dinámicamente el valor del atributo "titulo"
+    del objeto "producto". Si no se asigna nada, el valor predeterminado "Titulo" se mostrará.
+-->
 
-    <a
+Precio: <span th:text="${producto.precio}">Precio</span>
+<!--
+    <span>: Contenedor en línea que mostrará el precio del producto.
+    th:text="${producto.precio}": Thymeleaf inserta dinámicamente el valor del atributo "precio"
+    del objeto "producto". Si no se asigna nada, el valor predeterminado "Precio" se mostrará.
+-->
+
+Cantidad: <span th:text="${producto.cantidad}">Cantidad</span>
+<!--
+    <span>: Contenedor en línea que mostrará la cantidad del producto.
+    th:text="${producto.cantidad}": Thymeleaf inserta dinámicamente el valor del atributo "cantidad"
+    del objeto "producto". Si no se asigna nada, el valor predeterminado "Cantidad" se mostrará.
+-->
 </body>
 </html>
