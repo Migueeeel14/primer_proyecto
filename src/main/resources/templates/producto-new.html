@@ -28,6 +28,8 @@
         Carga automáticamente el valor si está presente, o deja el campo vacío para ingresar un nuevo valor.
         <br>: Salto de línea.
     -->
+    <span th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></span>
+    <br>
 
     <input type="number" placeholder="Cantidad..." id="cantidad" name="cantidad" th:field="*{cantidad}"><br>
     <!--
@@ -39,7 +41,7 @@
         <br>: Salto de línea.
     -->
 
-    <input type="number" min="0" step="0.01" placeholder="Precio..." id="precio" name="precio" th:field="*{precio}">
+    <input type="number" min="0" step="0.01" placeholder="Precio..." id="precio" name="precio" th:field="*{precio}"><br>
     <!--
         <input type="number">: Campo de entrada que solo acepta números (para el precio del producto).
         min="0": El valor mínimo permitido es 0, es decir, no se permiten valores negativos.

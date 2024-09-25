@@ -1,6 +1,9 @@
 package com.iesjuanbosco.ejemploweb.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 //esta clase funcionará como entidad en la base de datos
 @Entity
@@ -13,8 +16,12 @@ public class Producto {
     //de esta forma el id se generara de manera autoincrementada
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotEmpty(message = "El titulo no puede estar en blanco")
     private String titulo;
+    @NotNull(message = "La cantidad no puede estar en blanco")
     private Integer cantidad;
+    @NotNull(message = "El precio no puede estar en blanco")
+    @Min(value=0, message = "El precio debe ser positivo")
     private Double precio;
 
     public Producto() {

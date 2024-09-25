@@ -13,7 +13,7 @@
     <h1>: Encabezado principal que muestra "Editar producto" como título de la página.
 -->
 
-<form action="/productos/update" method="post">
+<form th:action="@{/productos/update/{id}(id=${producto.id})}" method="post" th:object="${producto}">
     <!--
         <form>: Inicio del formulario que permite editar un producto.
         action="/productos/update": Define la URL a la que se enviará el formulario para actualizar el producto.
@@ -34,7 +34,7 @@
         for="titulo": Asocia la etiqueta con el campo de entrada que tiene el atributo "id='titulo'".
     -->
 
-    <input type="text" id="titulo" name="titulo" th:value="${producto.titulo}" required /><br>
+    <input type="text" id="titulo" name="titulo" th:value="${producto.titulo}" /><br>
     <!--
         <input type="text">: Campo de texto donde el usuario puede editar el título del producto.
         id="titulo": Identificador del campo de entrada.
@@ -50,7 +50,7 @@
         for="cantidad": Asocia la etiqueta con el campo de entrada con id="cantidad".
     -->
 
-    <input type="number" id="cantidad" name="cantidad" th:value="${producto.cantidad}" required /><br>
+    <input type="number" id="cantidad" name="cantidad" th:value="${producto.cantidad}" /><br>
     <!--
         <input type="number">: Campo que permite introducir solo números.
         id="cantidad": Identificador del campo de entrada.
@@ -66,7 +66,7 @@
         for="precio": Asocia la etiqueta con el campo de entrada con id="precio".
     -->
 
-    <input type="number" id="precio" name="precio" th:value="${producto.precio}" step="0.01" required /><br>
+    <input type="number" id="precio" name="precio" th:value="${producto.precio}" step="0.01" /><br>
     <!--
         <input type="number">: Campo de entrada para números (precio).
         id="precio": Identificador del campo de entrada.

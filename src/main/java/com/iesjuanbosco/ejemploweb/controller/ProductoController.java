@@ -2,8 +2,10 @@ package com.iesjuanbosco.ejemploweb.controller;
 
 import com.iesjuanbosco.ejemploweb.entity.Producto;
 import com.iesjuanbosco.ejemploweb.repository.ProductoRepository;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -72,6 +74,8 @@ public class ProductoController {
 
     //Muestra un producto a partir del id de la ruta
     @GetMapping("/productos/view/{id}")
+    //@PathVariable vincula una variable con un parámetro, en este caso sirve para buscar el producto a
+    // través del id y poder mostrarlo mediante dicha variable
     public String view(@PathVariable Long id, Model model){
         //Obtenemos el producto de la BD a partir del id de la barra de direcciones
         //En este caso usamos Optional para que no salten posibles exceptiones de que no exista el producto. Se usa para englobar tanto nulos como no nulos.
@@ -90,26 +94,26 @@ public class ProductoController {
 
     /*Editar un producto a partir del id de la ruta*/
     @GetMapping("/productos/edit/{id}")
+    //@PathVariable vincula una variable con un parámetro, en este caso sirve para buscar el producto a
+    // través del id y poder editarlo mediante dicha variable
     public String edit(@PathVariable long id, Model model){
-        //Buscar un producto por la id, en caso de no encontrarlo devuelve null.
-        //Se usa para que no se produzcan excepciones en caso de no encontrar el producto.
-        Producto producto = productoRepository.findById(id).orElse(null);
-        //En caso de no haber encontrado el producto y nos haya devuelto null, nos redirije a la ruta productos
-        if(producto==null){
-            return "redirect:/productos";
+        //Buscar un producto por la id.
+        Optional <Producto> producto = productoRepository.findById(id);
+
+        if(producto.isPresent()){
+            //pasamos el objeto a la vista
+            model.addAttribute("producto", producto.get());
+            return "producto-edit";
         }
-        //Si el producto a editar si existe, lo mostramos en la vista a través del model.
-        else{
-            model.addAttribute("producto", producto);
-        }
-        //Redirigir a /productos
-        return "producto-edit";
+        return "redirect:/productos";
     }
 
     //Es el Post del metodo editar.
     //Muestra los cambios una vez se envian
-    @PostMapping("/productos/update")
-    public String update(Producto producto) {
+    @PostMapping("/productos/update/{id}")
+    public String update(@PathVariable Long id, Producto producto) {
+
+        producto.setId(id);
         // Guardar el producto actualizado
         productoRepository.save(producto);
 
@@ -127,8 +131,13 @@ public class ProductoController {
     //Post del metodo newProducto
     //Lo que se muestra cuando se envia la vista
     @PostMapping("/productos/new")
-    public String newProductoInsert(Producto producto){
-        //Insertamos los dtos en la BD
+    public String newProductoInsert(@Valid Producto producto, BindingResult bindingResult){
+        //Si ha habido errores de validacion volvemos a mostrar el formulario
+        if(bindingResult.hasErrors()){
+            return "producto-new";
+        }
+
+        //Si no ha habido errores de validacion insertamos los dtos en la BD
         productoRepository.save(producto);
 
         //Redirigimos a /productos
